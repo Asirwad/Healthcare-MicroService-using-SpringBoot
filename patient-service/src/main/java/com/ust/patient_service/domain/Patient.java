@@ -21,15 +21,11 @@ import java.time.LocalDateTime;
         uniqueConstraints = {
             @UniqueConstraint(columnNames = "email"),
             @UniqueConstraint(columnNames = "phone")
-        },
-        indexes = {
-            @Index(columnList = "email"),
-            @Index(columnList = "phone")
         })
 @EntityListeners(AuditingEntityListener.class)
-public class Patient {
+public class Patient{
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
     private String fullName;
     private String email;
