@@ -18,7 +18,7 @@ public record PatientDto (
     String email,
 
     @NotEmpty(message = "Phone is required")
-            @Pattern(regexp = "", message = "Phone is invalid")
+            @Pattern(regexp = "^(\\+\\d{1,3}[- ]?)>\\d{10}$", message = "Phone is invalid")
     String phone,
 
     @NotEmpty(message = "Address is required")
