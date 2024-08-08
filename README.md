@@ -12,7 +12,7 @@ This case study involves designing and implementing a microservices-based archit
     Get Patient Info: Retrieves information about a specific patient.
     Update Patient Info: Updates patient details.
 
-**Doctor Service **
+**Doctor Service**
 
     Create Doctor: Registers new doctors.
     Get Doctor Info: Retrieves information about a specific doctor.
