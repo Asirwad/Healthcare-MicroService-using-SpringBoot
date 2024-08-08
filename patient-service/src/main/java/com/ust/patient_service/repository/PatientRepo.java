@@ -10,4 +10,5 @@ public interface PatientRepo extends JpaRepository<Patient, Long> {
     Optional<Patient> findByEmail(String email);
     Optional<Patient> findByPhone(String phone);
     Optional<Patient> findByFullNameContainingAndDob(String fullName, LocalDate dob);
+    Optional<Patient> findByEmailOrPhone(String email, String phone);
 }
