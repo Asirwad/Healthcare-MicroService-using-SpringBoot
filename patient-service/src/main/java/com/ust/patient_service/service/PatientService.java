@@ -17,7 +17,8 @@ public class PatientService {
     }
 
     public List<Patient> getAllPatients(){
-        return patientRepo.findAll();
+        log.debug("Getting all patients");
+        return List.copyOf(patientRepo.findAll());
     }
 
     public Patient createPatient(Patient patient){
@@ -27,7 +28,7 @@ public class PatientService {
                     log.error("Patient with {} or {} Already exists!", p.getEmail(), p.getPhone());
                     throw new RuntimeException("Patient with "+p.getEmail()+" or "+p.getPhone()+"Already exists!");
                 });
-        log.debug("Patient {} created", patient);
+        log.debug("Patient does not exist with email: {} or phone: {} created", patient.getEmail(), patient.getPhone());
         return patientRepo.save(patient);
     }
 
@@ -37,13 +38,30 @@ public class PatientService {
                 .orElseThrow(()-> new RuntimeException("Patient not found, email: "+email));
     }
 
-    public Patient getPatient(Long id){
+    public Patient getPatient(long id){
         log.debug("Searching patients with id {}",id);
         return patientRepo.findById(id)
                 .orElseThrow(()-> new RuntimeException("Patient not found, id: "+id));
     }
 
+    public Patient updatePatient(Patient patient){
+        log.debug("Updating patient: {}", patient);
+        return patientRepo.save(patient); // to be replaced by saveAndFlush
+    }
+
     public void deletePatient(Long id){
+        log.debug("Updating patient, id: {}", id);
         patientRepo.deleteById(id);
+    }
+
+    public Optional<Patient> searchByEmail(String email){
+        log.debug("Searching patient by email : {}", email);
+        return patientRepo.searchByEmail(email);
+    }
+
+    public Patient searchByPhone(String phone){
+        log.debug("Searching patient by phone: {}", phone);
+        return patientRepo.findByPhone(phone)
+                .orElseThrow(() -> new RuntimeException("Patient not found!, phone: "+ phone));
     }
 }
