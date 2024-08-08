@@ -54,9 +54,9 @@ public class PatientController {
         }
     }
     @GetMapping("/find/{email}")
-    public ResponseEntity<Patient> getPatientByEmail(@PathVariable String email){
+    public ResponseEntity<Patient> getPatientByEmail(@PathVariable("email") String email){
         try {
-            return new ResponseEntity<>(patientService.getPatientByEmail(email), HttpStatus.ACCEPTED);
+            return ResponseEntity.ok().body(patientService.getPatientByEmail(email));
         }catch (Exception ex){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
