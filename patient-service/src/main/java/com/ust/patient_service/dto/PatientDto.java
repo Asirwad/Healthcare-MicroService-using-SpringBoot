@@ -20,8 +20,8 @@ public record PatientDto (
             @Pattern(regexp = "", message = "Phone is invalid")
     String phone,
 
-    LocalDate dob,
-
     @NotEmpty(message = "Address is required")
-    String address
+    String address,
+
+    LocalDate dob
 ){}
