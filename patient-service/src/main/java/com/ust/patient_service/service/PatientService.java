@@ -1,6 +1,8 @@
 package com.ust.patient_service.service;
 
 import com.ust.patient_service.domain.Patient;
+import com.ust.patient_service.domain.PreExistingIllness;
+import com.ust.patient_service.dto.IllnessDTO;
 import com.ust.patient_service.repository.PatientRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -44,14 +46,21 @@ public class PatientService {
                 .orElseThrow(()-> new RuntimeException("Patient not found, id: "+id));
     }
 
-    public Patient updatePatient(Patient patient){
-        log.debug("Updating patient: {}", patient);
-        return patientRepo.save(patient); // to be replaced by saveAndFlush
-    }
-
     public void deletePatient(Long id){
         log.debug("Updating patient, id: {}", id);
         patientRepo.deleteById(id);
+    }
+
+    public Patient addIllnessToPatient(Long id, PreExistingIllness illness){
+        log.debug("Adding an illness to patient with id: {}",id);
+        Patient patientOld = patientRepo.findById(id).orElseThrow();
+        patientOld.getPreExistingIllnesses().add(illness);
+        return patientRepo.save(patientOld);
+    }
+
+    public Patient updatePatient(Patient patient){
+        log.debug("Updating patient: {}", patient);
+        return patientRepo.save(patient); // to be replaced by saveAndFlush
     }
 
     public Optional<Patient> searchByEmail(String email){

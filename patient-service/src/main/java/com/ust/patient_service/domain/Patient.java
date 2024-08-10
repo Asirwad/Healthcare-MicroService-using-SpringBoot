@@ -11,6 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,13 +26,23 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public class Patient{
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @TableGenerator(
+            name = "patient_id_generator",
+            initialValue = 100
+    )
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "patient_id_generator")
     private Long id;
     private String fullName;
     private String email;
     private String phone;
     private LocalDate dob;
     private String address;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "patient-illness",
+            joinColumns = {@JoinColumn(name = "patient_id")},
+            inverseJoinColumns = {@JoinColumn(name = "illness_id")})
+    List<PreExistingIllness> preExistingIllnesses;
 
     @CreatedDate
     @Column(updatable = false, nullable = false)

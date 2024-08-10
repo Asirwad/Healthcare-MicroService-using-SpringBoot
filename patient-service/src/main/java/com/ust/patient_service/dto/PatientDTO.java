@@ -1,5 +1,6 @@
 package com.ust.patient_service.dto;
 
+import com.ust.patient_service.domain.PreExistingIllness;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Past;
@@ -7,8 +8,9 @@ import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
+import java.util.List;
 
-public record PatientDto (
+public record PatientDTO (
     long id,
 
     @NotEmpty(message = "Name is required")
@@ -20,12 +22,14 @@ public record PatientDto (
     String email,
 
     @NotEmpty(message = "Phone is required")
-    @Pattern(regexp = "^(\\+\\d{1,3}[- ]?)>\\d{10}$", message = "Phone is invalid")
+    @Pattern(regexp = "((\\+*)((0[ -]*)*|((91 )*))((\\d{12})+|(\\d{10})+))|\\d{5}([- ]*)\\d{6}", message = "Phone is invalid")
     String phone,
 
     @NotEmpty(message = "Address is required")
     String address,
 
     @Past(message = "Date of birth must be in past")
-    LocalDate dob
+    LocalDate dob,
+
+    List<PreExistingIllness> preExistingIllnesses
 ){}
