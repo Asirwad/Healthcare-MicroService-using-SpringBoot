@@ -2,7 +2,9 @@ package com.ust.patient_service.utils;
 
 import com.ust.patient_service.domain.Patient;
 import com.ust.patient_service.dto.PatientDTO;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PatientDtoConverter {
     public PatientDTO toDto(Patient patient){
         return new PatientDTO(
