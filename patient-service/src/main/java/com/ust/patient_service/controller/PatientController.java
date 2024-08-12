@@ -32,24 +32,6 @@ public class PatientController {
         this.patientDtoConverter = patientDtoConverter;
     }
 
-    // handle runtime exception
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<String> handleRuntimeException(RuntimeException e){
-        log.error("An error occurred: ", e);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-    }
-
-    // handle Method Argument Not Valid Exception
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Object> handleValidationException(MethodArgumentNotValidException e){
-        log.error("An error occurred: ", e);
-        var fieldErrors = e.getFieldErrors();
-        Map<Object,Object> errors = new HashMap<>();
-        fieldErrors.forEach(fieldError -> errors.put(fieldError.getField(), fieldError.getDefaultMessage()));
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
-    }
-
-
     @GetMapping("/")
     public ResponseEntity<List<Patient>> findAllPatient(){
         return ResponseEntity.ok().body(patientService.getAllPatients());
