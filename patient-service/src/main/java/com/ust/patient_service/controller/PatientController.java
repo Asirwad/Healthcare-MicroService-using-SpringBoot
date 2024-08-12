@@ -6,6 +6,7 @@ import com.ust.patient_service.dto.IllnessDTO;
 import com.ust.patient_service.dto.PatientDTO;
 import com.ust.patient_service.repository.PatientRepo;
 import com.ust.patient_service.service.PatientService;
+import com.ust.patient_service.utils.PatientDtoConverter;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +25,11 @@ import java.util.Map;
 public class PatientController {
 
     private final PatientService patientService;
+    private final PatientDtoConverter patientDtoConverter;
 
-    public PatientController(PatientService patientService){
+    public PatientController(PatientService patientService, PatientDtoConverter patientDtoConverter){
         this.patientService = patientService;
+        this.patientDtoConverter = patientDtoConverter;
     }
 
     // handle runtime exception
@@ -46,28 +49,6 @@ public class PatientController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
 
-    private PatientDTO toDto(Patient patient){
-        return new PatientDTO(
-                patient.getId(),
-                patient.getFullName(),
-                patient.getEmail(),
-                patient.getPhone(),
-                patient.getAddress(),
-                patient.getDob(),
-                patient.getPreExistingIllnesses()
-        );
-    }
-
-    private Patient toEntity(PatientDTO dto){
-        Patient patient = new Patient();
-        patient.setFullName(dto.fullName());
-        patient.setEmail(dto.email());
-        patient.setPhone(dto.phone());
-        patient.setAddress(dto.address());
-        patient.setDob(dto.dob());
-        patient.setPreExistingIllnesses(dto.preExistingIllnesses());
-        return patient;
-    }
 
     @GetMapping("/")
     public ResponseEntity<List<Patient>> findAllPatient(){
@@ -76,9 +57,9 @@ public class PatientController {
 
     @PostMapping
     public ResponseEntity<PatientDTO> createPatient(@Valid @RequestBody PatientDTO dto){
-        Patient patient = toEntity(dto);
+        Patient patient = patientDtoConverter.toEntity(dto);
         patient = patientService.createPatient(patient);
-        dto = toDto(patient);
+        dto = patientDtoConverter.toDto(patient);
         return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 

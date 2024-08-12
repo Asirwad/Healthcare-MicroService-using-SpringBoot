@@ -5,6 +5,7 @@ import com.ust.patient_service.domain.PreExistingIllness;
 import com.ust.patient_service.dto.IllnessDTO;
 import com.ust.patient_service.repository.PatientRepo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
