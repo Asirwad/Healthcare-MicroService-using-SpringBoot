@@ -57,10 +57,11 @@ public class PatientController {
 
     @PostMapping
     public ResponseEntity<PatientDTO> createPatient(@Valid @RequestBody PatientDTO dto){
+        // TODO handle DuplicatePatientException
         Patient patient = patientDtoConverter.toEntity(dto);
         patient = patientService.createPatient(patient);
-        dto = patientDtoConverter.toDto(patient);
-        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
+        var responseBody = patientDtoConverter.toDto(patient);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseBody);
     }
 
     @PostMapping("/{id}/illness")
@@ -79,12 +80,22 @@ public class PatientController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Patient> getPatient(@PathVariable("id") long id){
+        //
         return ResponseEntity.ok(patientService.getPatient(id));
     }
 
-    @GetMapping("/find/{email}")
-    public ResponseEntity<Patient> getPatientByEmail(@PathVariable("email") String email){
-        return ResponseEntity.ok().body(patientService.getPatientByEmail(email));
+    @GetMapping
+    public ResponseEntity<PatientDTO> searchForPatient(
+            @RequestParam(name = "k") String key,
+            @RequestParam(name = "v") String data
+    ){
+        Patient patient;
+        if(key.equals("email")){
+            patient = patientService.getPatientByEmail(data);
+        } else {
+            patient = patientService.searchByPhone(data);
+        }
+        return ResponseEntity.ok().body(patientDtoConverter.toDto(patient));
     }
 
 
