@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: doctor-service
+  data:
+    mongodb:
+      uri: mongodb+srv://asirwadsali:HJZzsX5g4LO1evMp@cluster0.mjotq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      database: doctor_service
+      username:
+      password:
+server:
+  port: 8200
+logging:
+  level:
+    #    root: WARN
+    org:
+      mongodb:
+        driver: DEBUG
+      springframework:
+        #        web: WARN
+        data:
+          core:
+            MongoTemplate: DEBUG
+            MongoOperations: DEBUG
+  pattern:
+    console: "%msg%n"
